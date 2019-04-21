@@ -208,8 +208,13 @@ namespace Emby.Plugins.LazyMan
                 "playback.svcs.mlb.com"
             };
 
-            var info = pingTestDomains.Where(domain => !PingTest.IsMatch(domain))
-                .Select(domain => new ChannelItemInfo {Id = domain, Name = $"{domain} IP ERROR"})
+            var info = pingTestDomains.Where(domain => !PingTest.IsMatch(domain, _logger))
+                .Select(domain => new ChannelItemInfo
+                {
+                    Id = domain, 
+                    Name = $"{domain} IP ERROR",
+                    Type = ChannelItemType.Folder
+                })
                 .ToList();
 
             info.Add(new ChannelItemInfo
@@ -381,8 +386,7 @@ namespace Emby.Plugins.LazyMan
                 var itemInfo = new ChannelItemInfo
                 {
                     Id = id,
-                    Name =
-                        $"{foundGame.HomeTeam.Abbreviation} vs {foundGame.AwayTeam.Abbreviation} on {foundFeed.CallLetters} {quality.Value.Title}",
+                    Name = quality.Value.Title,
                     ContentType = ChannelMediaContentType.Movie,
                     Type = ChannelItemType.Media,
                     MediaType = ChannelMediaType.Video,
@@ -392,7 +396,8 @@ namespace Emby.Plugins.LazyMan
                         {
                             Path = streamUrl,
                             Protocol = MediaProtocol.Http,
-                            Id = id
+                            Id = id,
+                            Bitrate = quality.Value.Bitrate
                         }
                     },
                     IsLiveStream = true

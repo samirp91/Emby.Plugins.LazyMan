@@ -1,5 +1,6 @@
 using System.Net;
 using Emby.Plugins.LazyMan.Configuration;
+using MediaBrowser.Model.Logging;
 
 namespace Emby.Plugins.LazyMan.Utils
 {
@@ -11,10 +12,13 @@ namespace Emby.Plugins.LazyMan.Utils
          * playback.svcs.mlb.com
          */
         
-        public static bool IsMatch(string testHost)
+        public static bool IsMatch(string testHost, ILogger logger)
         {
-            var validIp = Dns.GetHostAddresses(PluginConfiguration.M3U8URL)[0];
+            var validIp = Dns.GetHostAddresses(PluginConfiguration.M3U8Url)[0];
             var testIp = Dns.GetHostAddresses(testHost)[0];
+
+            logger.Debug("[PingTest] Host: {0} ValidIP: {1} HostIP: {2}",
+                testHost, validIp, testIp);
 
             return Equals(validIp, testIp);
         }

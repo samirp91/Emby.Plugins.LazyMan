@@ -25,7 +25,7 @@ namespace Emby.Plugins.LazyMan.GameApi
             
             var request = new HttpRequestOptions
             {
-                Url = string.Format(endpoint, PluginConfiguration.M3U8URL),
+                Url = string.Format(endpoint, PluginConfiguration.M3U8Url),
                 RequestHeaders =
                 {
                     // Requires a User-Agent header
