@@ -6,10 +6,14 @@ Get started with LazyMan at https://reddit.com/r/LazyMan
 
 Hostsfile directions: https://www.reddit.com/r/LazyMan/wiki/hostsfile
 
-Just extract the release to the plugins folder and restart Emby.
-
 You must edit your hosts file to use this plugin!
 for docker either use `--add-host` or `extra_hosts`
+
+Steps to install:
+1. Download latest release
+2. Extract Emby.Plugins.LazyMan.dll to the Emby plugins directory
+3. Add host entries
+4. Restart Emby
 
 docker compose sample:
 
