@@ -47,6 +47,7 @@ namespace Emby.Plugins.LazyMan.GameApi.Containers
 
     public class Item
     {
+        public string Id { get; set; }
         public string MediaPlaybackId { get; set; }
         public string MediaFeedType { get; set; }
         public string CallLetters { get; set; }

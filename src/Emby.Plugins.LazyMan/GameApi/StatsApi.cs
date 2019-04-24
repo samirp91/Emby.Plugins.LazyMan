@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -97,7 +98,7 @@ namespace Emby.Plugins.LazyMan.GameApi
                             tmp.Feeds.Add(
                                 new Feed
                                 {
-                                    Id = item.MediaPlaybackId,
+                                    Id = item.MediaPlaybackId ?? item.Id,
                                     FeedType = item.MediaFeedType,
                                     CallLetters = item.CallLetters
                                 }
