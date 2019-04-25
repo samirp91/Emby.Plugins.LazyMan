@@ -49,7 +49,8 @@ namespace Emby.Plugins.LazyMan
         
         public string Name => Plugin.Instance.Name;
         public string Description => Plugin.Instance.Description;
-        public string DataVersion => "1";
+        public string DataVersion => "3";
+        
         public string HomePageUrl => "https://reddit.com/r/LazyMan";
         public ChannelParentalRating ParentalRating => ChannelParentalRating.GeneralAudience;
         public bool IsEnabledFor(string userId) => true;
@@ -74,31 +75,18 @@ namespace Emby.Plugins.LazyMan
         {
             _logger.Debug("[LazyMan] GetChannelImage {0}",
                 GetType().Namespace + ".Images.LM.png");
-            switch (type)
+            var path = GetType().Namespace + ".Images.LM.png";
+            return Task.FromResult(new DynamicImageResponse
             {
-                case ImageType.Primary:
-                case ImageType.Thumb:
-                {
-                    var path = GetType().Namespace + ".Images.LM.png";
-                    return Task.FromResult(new DynamicImageResponse
-                    {
-                        Format = ImageFormat.Png,
-                        HasImage = true,
-                        Stream = GetType().Assembly.GetManifestResourceStream(path)
-                    });
-                }
-                default:
-                    throw new ArgumentException("Unsupported image type: " + type);
-            }
+                Format = ImageFormat.Png,
+                HasImage = true,
+                Stream = GetType().Assembly.GetManifestResourceStream(path)
+            });
         }
 
         public IEnumerable<ImageType> GetSupportedChannelImages()
         {
-            return new List<ImageType>
-            {
-                ImageType.Thumb,
-                ImageType.Primary
-            };
+            return Enum.GetValues(typeof(ImageType)).Cast<ImageType>();
         }
                
         public Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
@@ -373,14 +361,14 @@ namespace Emby.Plugins.LazyMan
 
             var itemInfoList = new List<ChannelItemInfo>();
             
-            var streamBaseUrl = await _powerSportsApi.GetPlaylistUrlAsync(
+            var (status, response) = await _powerSportsApi.GetPlaylistUrlAsync(
                 sport,
                 gameDateTime,
                 feedId,
                 PluginConfiguration.Cdn
             ).ConfigureAwait(false);
 
-            if (streamBaseUrl == null)
+            if (!status)
             {
                 return new ChannelItemResult
                 {
@@ -389,7 +377,7 @@ namespace Emby.Plugins.LazyMan
                         new ChannelItemInfo
                         {
                             Id = $"{sport}_{date}_{gameId}_{feedId}_null",
-                            Name = "Game not available.",
+                            Name = response,
                             ContentType = ChannelMediaContentType.Clip,
                             Type = ChannelItemType.Media,
                             MediaType = ChannelMediaType.Photo
@@ -406,10 +394,10 @@ namespace Emby.Plugins.LazyMan
                 var id = $"{sport}_{date}_{gameId}_{feedId}_{quality.Key}";
                 
                 // Find index of last file
-                var lastIndex = streamBaseUrl.LastIndexOf('/');
+                var lastIndex = response.LastIndexOf('/');
 
                 // Remove file, append quality file
-                var streamUrl = streamBaseUrl.Substring(0, lastIndex) + '/' + quality;
+                var streamUrl = response.Substring(0, lastIndex) + '/' + quality.Value.File;
 
                 // Format string for current stream
                 streamUrl = string.Format(streamUrl, foundGame.State == "In Progress" ? "slide" : "complete-trimmed");
@@ -422,6 +410,7 @@ namespace Emby.Plugins.LazyMan
                     ContentType = ChannelMediaContentType.Movie,
                     Type = ChannelItemType.Media,
                     MediaType = ChannelMediaType.Video,
+                    ImageUrl = "",
                     MediaSources = new List<MediaSourceInfo>
                     {
                         new MediaSourceInfo

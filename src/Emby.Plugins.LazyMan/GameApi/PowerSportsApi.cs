@@ -18,7 +18,7 @@ namespace Emby.Plugins.LazyMan.GameApi
             _logger = logger;
         }
 
-        public async Task<string> GetPlaylistUrlAsync(string league, DateTime date, string mediaId, string cdn)
+        public async Task<(bool Status, string Response)> GetPlaylistUrlAsync(string league, DateTime date, string mediaId, string cdn)
         {
             var endpoint = $"https://{{0}}/getM3U8.php?league={league}&date={date:yyyy-MM-dd}&id={mediaId}&cdn={cdn}";
             
@@ -50,7 +50,7 @@ namespace Emby.Plugins.LazyMan.GameApi
             if (url.Contains("Not"))
             {
                 _logger.Warn("[GetStreamUrlAsync] Response contains Not!");
-                return null;
+                return (false, url);
             }
                 
 
@@ -66,11 +66,11 @@ namespace Emby.Plugins.LazyMan.GameApi
                 if (expiresOn < currently)
                 {
                     _logger.Warn("[GetStreamUrlAsync] Stream URL is expired.");
-                    return null;   
+                    return (false, "Stream URL is expired");   
                 }
             }
             
-            return url;
+            return (true, url);
         }
     }
 }
