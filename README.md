@@ -12,7 +12,7 @@ for docker either use `--add-host` or `extra_hosts`
 ##### NOTE: The offical docker does not work for IP binding! use https://hub.docker.com/r/binhex/arch-emby in place of it.
 
 Steps to install:
-1. Download latest release
+1. Download [latest release](https://github.com/crobibero/Emby.Plugins.LazyMan/releases/latest).
 2. Extract Emby.Plugins.LazyMan.dll to the Emby plugins directory
 3. Add host entries
 4. Restart Emby
