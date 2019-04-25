@@ -9,6 +9,8 @@ Hostsfile directions: https://www.reddit.com/r/LazyMan/wiki/hostsfile
 You must edit your hosts file to use this plugin!
 for docker either use `--add-host` or `extra_hosts`
 
+##### NOTE: The offical docker does not work for IP binding! use https://hub.docker.com/r/binhex/arch-emby in place of it.
+
 Steps to install:
 1. Download latest release
 2. Extract Emby.Plugins.LazyMan.dll to the Emby plugins directory
@@ -20,7 +22,7 @@ docker compose sample:
 ```
 emby:
     container_name: emby
-    image: emby/embyserver:latest
+    image: binhex/arch-emby:latest
     restart: always
     extra_hosts:
         - "mf.svc.nhl.com:{ip}"
