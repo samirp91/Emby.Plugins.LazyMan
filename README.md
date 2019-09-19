@@ -22,7 +22,7 @@ docker compose sample:
 ```
 emby:
     container_name: emby
-    image: binhex/arch-emby:latest
+    image: linuxserver/emby:latest
     restart: always
     extra_hosts:
         - "mf.svc.nhl.com:{ip}"
