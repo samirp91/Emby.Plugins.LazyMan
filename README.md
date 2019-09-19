@@ -9,7 +9,7 @@ Hostsfile directions: https://www.reddit.com/r/LazyMan/wiki/hostsfile
 You must edit your hosts file to use this plugin!
 for docker either use `--add-host` or `extra_hosts`
 
-##### NOTE: The offical docker does not work for IP binding! use https://hub.docker.com/r/binhex/arch-emby in place of it.
+##### NOTE: The offical docker does not work for IP binding! use https://hub.docker.com/r/linuxserver/emby in place of it.
 
 Steps to install:
 1. Download [latest release](https://github.com/crobibero/Emby.Plugins.LazyMan/releases/latest).
