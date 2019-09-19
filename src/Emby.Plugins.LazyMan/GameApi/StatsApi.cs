@@ -54,7 +54,7 @@ namespace Emby.Plugins.LazyMan.GameApi
 
             request.Url = string.Format(request.Url, inputDate.ToString("yyyy-MM-dd"));
 
-            _logger.Debug($"[GetGamesAsync] Getting games from {request.Url}");
+            _logger.Debug($"[LazyMan][GetGamesAsync] Getting games from {request.Url}");
 
             var responseStream = await _httpClient.Get(request).ConfigureAwait(false);
             var containerObject = await _jsonSerializer.DeserializeFromStreamAsync(responseStream,
@@ -91,15 +91,13 @@ namespace Emby.Plugins.LazyMan.GameApi
                     
                     foreach (var epg in game.Content.Media.Epg)
                     {
-                        if (!epg.Title.StartsWith(_gameType, StringComparison.OrdinalIgnoreCase))
-                            continue;
                         foreach (var item in epg.Items)
-                        {   
+                        {
                             tmp.Feeds.Add(
                                 new Feed
                                 {
                                     Id = item.MediaPlaybackId ?? item.Id,
-                                    FeedType = item.MediaFeedType,
+                                    FeedType = epg.Title + " - " + item.MediaFeedType,
                                     CallLetters = item.CallLetters
                                 }
                             );
