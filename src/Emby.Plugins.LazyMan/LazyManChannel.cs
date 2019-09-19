@@ -115,7 +115,7 @@ namespace Emby.Plugins.LazyMan
             // Split parts to see how deep we are
             var querySplit = query.FolderId.Split(new[] {'_'}, StringSplitOptions.RemoveEmptyEntries);
             
-            switch (querySplit.Length - 1)
+            switch (querySplit.Length)
             {
                 case 0:
                     // List sports
